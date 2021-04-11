@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <style>
+        h1 {text-align: center;}
+        h3  {text-align: center;}
+        p {text-align: center;}
+div {text-align: center;}
+        </style>
+        <base target="_top">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+        
+        <!--##JAVASCRIPT FUNCTIONS ---------------------------------------------------- -->
+        <script>
+          //PREVENT FORMS FROM SUBMITTING / PREVENT DEFAULT BEHAVIOUR
+          function preventFormSubmit() {
+            var forms = document.querySelectorAll('form');
+            for (var i = 0; i < forms.length; i++) {
+              forms[i].addEventListener('submit', function(event) {
+              event.preventDefault();
+              });
+            }
+          }
+          window.addEventListener("load", preventFormSubmit, true); 
+             
+          
+          //HANDLE FORM SUBMISSION
+          function handleFormSubmit(formObject) {
+            google.script.run.withSuccessHandler(createTable).processForm(formObject);
+            document.getElementById("search-form").reset();
+          }
+        
+          //CREATE THE DATA TABLE
+          function createTable(dataArray) {
+            if(dataArray && dataArray !== undefined && dataArray.length != 0){
+              var result = "<table class='table table-sm table-striped' id='dtable' style='font-size:0.8em'>"+
+                           "<thead style='white-space: nowrap'>"+
+                             "<tr>"+                               //Change table headings to match witht he Google Sheet
+                              "<th scope='col'>GMAIL ID</th>"+
+                              "<th scope='col'>Student Name</th>"+
+                              "<th scope='col'>Quests</th>"+
+                              "<th scope='col'>Skill Badge</th>"+
+                              "<th scope='col'>Milestone 1</th>"+
+                              "<th scope='col'>Milestone 2</th>"+
+                              "<th scope='col'>Milestone 3</th>"+
+                              "<th scope='col'>Milestone 4</th>"+
+                            "</tr>"+
+                          "</thead>";
+              for(var i=0; i<dataArray.length; i++) {
+                  result += "<tr>";
+                  for(var j=0; j<dataArray[i].length; j++){
+                      result += "<td>"+dataArray[i][j]+"</td>";
+                  }
+                  result += "</tr>";
+              }
+              result += "</table>";
+              var div = document.getElementById('search-results');
+              div.innerHTML = result;
+            }else{
+              var div = document.getElementById('search-results');
+              //div.empty()
+              div.innerHTML = "Data not found!";
+            }
+          }
+        </script>
+        <!--##JAVASCRIPT FUNCTIONS ~ END ---------------------------------------------------- -->
+        
+    </head>
+    <body>
+        <div class="container">
+            <br>
+            <div class="row">
+              <div class="col">
+              <h1>Qwiklabs Progress for GoogleCloudReady Facilitator Program 2021</h1>
+              <h4>Facilitator: Sapthagiri College Of Engineering Bangalore</h4> 
+              
+                  <!-- ## SEARCH FORM ------------------------------------------------ -->
+                  <form id="search-form" class="form-inline" onsubmit="handleFormSubmit(this)">
+                    <div class="form-group mb-2">
+                      <label for="searchtext">Enter your Gmail ID</label>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <input type="text" class="form-control" id="searchtext" name="searchtext" placeholder="Gmail">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Search</button>
+                  </form>
+                  <!-- ## SEARCH FORM ~ END ------------------------------------------- -->
+              
+              </div>    
+            </div>
+            <div class="row">
+              <div class="col">
+            
+                <!-- ## TABLE OF SEARCH RESULTS ------------------------------------------------ -->
+                <div id="search-results" class="table-responsive">
+                  <!-- The Data Table is inserted here by JavaScript -->
+                </div>
+                <!-- ## TABLE OF SEARCH RESULTS ~ END ------------------------------------------------ -->
+                  
+              </div>
+            </div>
+        </div>
+        <footer>
+          <p>Progress Updates  everyday at 7PM </p>
+  
+</footer>
+        
+        
+    </body>
+</html>
